@@ -8,7 +8,7 @@ var express = require('express')
 , _ = require('underscore')._;
 
 app.configure(function() {
-	app.set('port', process.env.OPENSHIFT_NODEJS_PORT || 3000);
+	app.set('port', process.env.OPENSHIFT_NODEJS_PORT || 8080);
   	app.set('ipaddr', process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1");
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
@@ -169,7 +169,7 @@ function purge(s, action) {
 					s.leave(room.name);
 				}
 			}
-		}	
+		}
 	} else {
 		//The user isn't in a room, but maybe he just disconnected, handle the scenario:
 		if (action === "disconnect") {
@@ -179,7 +179,7 @@ function purge(s, action) {
 			io.sockets.emit("update-people", {people: people, count: sizePeople});
 			var o = _.findWhere(sockets, {'id': s.id});
 			sockets = _.without(sockets, o);
-		}		
+		}
 	}
 }
 
@@ -230,7 +230,7 @@ io.sockets.on("connection", function (socket) {
 		if (typeof people[socket.id] !== "undefined")
 			io.sockets.in(socket.room).emit("isTyping", {isTyping: data, person: people[socket.id].name});
 	});
-	
+
 	socket.on("send", function(msTime, msg) {
 		//process.exit(1);
 		var re = /^[w]:.*:/;
@@ -249,7 +249,7 @@ io.sockets.on("connection", function (socket) {
 							socket.emit("update", "You can't whisper to yourself.");
 						}
 						break;
-					} 
+					}
 				}
 			}
 			if (found && socket.id !== whisperId) {
